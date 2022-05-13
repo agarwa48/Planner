@@ -7,15 +7,11 @@ import javax.swing.plaf.DimensionUIResource;
 
 public class scheduler
 {
-    int name, time, duration, priority;
-    JLabel nameLabel;
+    JLabel nameLabel[];
+    JTextField textField[];
+    String labels[] = {"Event name:", "Event date:", "Event priority:", "Event duration:", "Event time:"};
     JButton submit;
-   
-    JTextField textField1;
-    JTextField textField2;
-    JTextField textField3;
-    JTextField textField4;
-    JTextField textField5;
+    int i;
 
     public scheduler()
     {
@@ -28,37 +24,61 @@ public class scheduler
         frame.setVisible(true);
     
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(9,1,5,5));
+        panel.setLayout(new GridLayout(9,1,10,10));
     
-        JTextField textField1 = new JTextField("Enter event name:");
-        panel.add(textField1);
-        JTextField textField2 = new JTextField("Enter event time:");
-        panel.add(textField2);
-        JTextField textField3 = new JTextField("Enter event duration:");
-        panel.add(textField3);
-        JTextField textField4 = new JTextField("Enter event priority:");
-        panel.add(textField4);
-        JTextField textField5 = new JTextField("Enter event date:");
-        panel.add(textField5);
+
+        JLabel header = new JLabel("Enter Head Liner event:");
+        panel.add(header);
+
+        JTextField headLiner = new JTextField();
+        panel.add(headLiner);
+
+        JLabel header1 = new JLabel("Enter Head Liner time:");
+        panel.add(header1);
+
+        JTextField headLiner1 = new JTextField();
+        panel.add(headLiner1);
+
+        textField = new JTextField[5]; 
+        nameLabel = new JLabel[5];
+        for( i = 0; i< 5; i++)
+        {
+            nameLabel[i] = new JLabel(labels[i]);
+            panel.add(nameLabel[i]);
+            
+            textField[i] = new JTextField(); 
+            panel.add(textField[i]); 
+            //textField.setPreferredSize(new Dimension(250, 40));
+        }
+       
 
         JButton submit = new JButton("Submit");
-        submit.addActionListener(new ActionListener() {
+        submit.addActionListener(new ActionListener()
+        {
             @Override
             public void actionPerformed(ActionEvent e)
             {
                 if(e.getSource()==submit)
                 {
-                System.out.println("Your event name is" + textField1.getText());
-                System.out.println("Your event time is" + textField2.getText());
-                System.out.println("Your event duration is" + textField3.getText());
-                System.out.println("Your event priority is" + textField4.getText());
-                System.out.println("Your event date is" + textField5.getText());
+                    System.out.println(headLiner.getText());
+                    System.out.println(headLiner1.getText());
+                 
+                    for (i=0; i<5; i++)
+                    {
+                        System.out.println(textField[i].getText());
+                    }
+                }
+                for(i=0; i<5; i++)
+                {
+                    textField[i].setText("");
+                    headLiner.setText("");
+                    headLiner1.setText("");
                 }
             }
         });
-        submit.setPreferredSize(new Dimension(100, 100));
+
+        submit.setPreferredSize(new Dimension(1000, 100));
         panel.add(submit);
-        
 
         panel.setPreferredSize(new Dimension(250,250));
         panel.setBackground(Color.LIGHT_GRAY);
@@ -73,10 +93,4 @@ public class scheduler
           new scheduler();
         }
 
-    
-        
-
 }
-        
-    
-
