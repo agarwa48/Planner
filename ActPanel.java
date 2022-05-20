@@ -14,7 +14,10 @@ public class ActPanel extends JPanel
         this.duration = duration;
         this.priority = priority;
 
-        JLabel label1 = new Jlabel();
+        JLabel eventLabel1 = new JLabel();
+        JLabel timeLabel1 = new JLabel();
+        JLabel durJLabel1 = new JLabel();
+        JLabel prioityLabel1 = new JLabel();
 
     }
 }
