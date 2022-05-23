@@ -6,8 +6,14 @@ import java.awt.event.*;
 import java.lang.reflect.Array;
 import javax.swing.plaf.DimensionUIResource;
 import javax.xml.validation.Validator;
-import java.time.LocalTime;
 
+
+/** Schedule is the main public class
+ * implements the action listener
+ * contains the initializing of the JLabels, JButtons, JPanels, Arrays
+ * Contains the constructor
+ * Contains the methods
+ */
 public class schedule implements ActionListener
 {
     // initialising outside constructor
@@ -15,12 +21,12 @@ public class schedule implements ActionListener
 
     JLabel headerLabel[];
     JTextField headField[];
-    String headString[] = {"HeadLiner event:","Duration", "Staring time:"};
+    String headString[] = {"HeadLiner event:","Duration in hours:", "Staring time:"};
 
     JLabel nameLabel[];
     JTextField eventField[];
 
-    String eventString[] = {"Event name:", "Event time:" , "Event Duration" , "Event priority:" };
+    String eventString[] = {"Event name:", "Event Duration:" , "Event Time" , "Event Priority:" };
 
     // buttons
     JButton submit;
@@ -43,9 +49,14 @@ public class schedule implements ActionListener
     int j;
     int a;  
 
-    ArrayList<ArrayList<String> > tableList;
+    ArrayList<ArrayList<String> > tableList;       // 2D arrayList
 
-    // main constructor
+    /** 
+     * Initializes the components of the JFrame
+     * loops the printing of the textFields on the Panels
+     * adds the buttons to the panels
+     * adds buttons to the action listener
+     */
     public schedule()
     {
         frame = new JFrame();
@@ -66,7 +77,7 @@ public class schedule implements ActionListener
         finalPanel.setLayout(new GridLayout(2,1));
 
         finalPanel2 = new JPanel();                     // panel(1) inside the 3rd page panel
-        finalPanel.setLayout(new GridLayout(4,1));           
+        finalPanel2.setLayout(new GridLayout(4,1));           
 
         tableList = new ArrayList<ArrayList<String> >();
 
@@ -132,7 +143,6 @@ public class schedule implements ActionListener
 
         finalPanel2.add(back);
 
-        finalPanel.add(finalPanel2);
 
         // changing the looks of the panels
         headPanel.setPreferredSize(new Dimension(250,250));
@@ -147,40 +157,41 @@ public class schedule implements ActionListener
         finalPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
 
         finalPanel2.setPreferredSize(new Dimension(250, 250));
-        finalPanel2.setBackground(Color.GRAY);
 
         frame.setLayout(null);
         frame.setContentPane(headPanel); // adds the panel to the frame
         frame.setVisible(true);
     }
 
+    
     JTable table;
-
-    Object[][] data =                   // initialising the 2d array outside the method to access it elsewhere
+    Object[][] data = {};              // initialising the 2d array outside the method to access it elsewhere
+ 
+    /**
+     * Method to make a JTable
+     * @component removes the scroll pane once its duplicated to avoid duplication
+     * loop for getting values from the small array
+     */
+    public void table()
     {
-        {"Headliner event", "3 hours", "12:00", "1"},
-        {"event2", "2 hours", "15:00", "2"}
-    };
-
-
-    public void table() // table method
-    {
-                //Get the components in the panel
+        //Get the components in the panel
         Component[] componentList = finalPanel.getComponents();
 
         //Loop through the components
         for(Component c : componentList){
 
-            //Find the components you want to remove
+            //Finds ScrollPane to remove it 
             if(c instanceof JScrollPane){
 
-                //Remove it
+                //Removes the panel
                 finalPanel.remove(c);
             }
         }
 
         int length = tableList.size();    //get the number of elements in the table List
+
         String[][] temp = new String[length][4];        // rows and cols
+
         for(i = 0; i<length; i++)
         {
             for(j = 0; j<4; j++)
@@ -197,32 +208,32 @@ public class schedule implements ActionListener
 
         JScrollPane scrollPane = new JScrollPane(table);
         JScrollPane scrollPane2 = new JScrollPane(table);
-        //scrollpane2++;
 
         
         finalPanel.add(scrollPane);
         finalPanel.remove(scrollPane);
         finalPanel.add(scrollPane2);
-        
+
+        finalPanel.add(finalPanel2);
 
         finalPanel.revalidate();
     }
 
-
-    // making a new method for action listener outside the constructor
+    /** 
+    * @override overrides the method in subclass
+    * contains the actionListener
+    * contains the result of clicking the JButtons
+    */
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        System.out.println(data.length);
-        Object[][] newData = new Object[data.length+1][4];  // creates a copy of the old array but bigger
+        Object[][] newData = new Object[data.length+1][4];  // creates a copy of the old array but bigger (+1)
         System.arraycopy(data,0 , newData, 1, data.length);  // still copies the same items before the new row is made
         System.out.println(String.valueOf(newData));
         System.out.println(Arrays.deepToString(newData));
 
         if(e.getSource()==submit)
         {
-            newData[0][0]= headField[0].getText();
-            newData[0][1]= headField[1].getText();
             tableList.add(addToList(headField[0].getText(), headField[1].getText(), headField[2].getText(), "1"));
 
             System.out.println(headField[0].getText());
@@ -237,10 +248,7 @@ public class schedule implements ActionListener
 
         else if(e.getSource()==submit2) 
         {
-            newData[newData.length-1][0] = eventField[0].getText();
-            newData[newData.length-1][1] = eventField[1].getText();
-            newData[newData.length-1][2] = eventField[2].getText();
-            tableList.add(addToList(eventField[0].getText(), eventField[1].getText(), eventField[2].getText(), ""));
+            tableList.add(addToList(eventField[0].getText(), eventField[1].getText(), eventField[2].getText(), priorityBox.getSelectedItem().toString()));
 
             frame.setContentPane(eventPanel);               // when the submit button is clicked, the panel changes from head page to event page
             frame.setVisible(true);
@@ -281,13 +289,19 @@ public class schedule implements ActionListener
             frame.setVisible(true);
         }
     }
-
+/**
+ * The main method to call the object table and the schedule
+ */
     public static void main(String[] args)
     {           
         schedule obj = new schedule();  // obj is the variable
-        obj.table();       
+        obj.table(); 
+              
     }
-
+    /** 
+     * private method for the 2d array list
+     * has a temporary variable which holds the values of event contents
+     */
     private ArrayList addToList(String name, String duration, String time, String priority)
     {
         ArrayList temp = new ArrayList<>();
